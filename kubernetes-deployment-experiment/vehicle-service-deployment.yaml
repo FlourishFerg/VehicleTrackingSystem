@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vehicle-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vehicle-service
+  template:
+    metadata:
+      labels:
+        app: vehicle-service
+    spec:
+      initContainers:
+      - name: wait-for-db
+        image: postgres:15-alpine
+        command: ['sh', '-c', 
+          'until pg_isready -h postgres-db -U postgres -d VEHICLE_VEHICLE_DB; do echo waiting for database; sleep 2; done;']
+        env:
+        - name: PGPASSWORD
+          value: "super_secret_password"
+      containers:
+        - name: vehicle-service
+          image: brightdotdev/vta-vehicle-service:v1
+          ports:
+            - containerPort: 8106
+          envFrom:
+            - configMapRef:
+                name: global-config
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "200m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"

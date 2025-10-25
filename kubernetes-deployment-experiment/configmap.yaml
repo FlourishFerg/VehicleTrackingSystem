@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: global-config
+data:
+  # Service Ports
+  API_GATEWAY_PORT: "8102"
+  AUTH_SERVICE_APP_PORT: "8103"
+  DISPATCH_SERVICE_APP_PORT: "8105"
+  LOGGING_SERVICE_APP_PORT: "8104"
+  VEHICLE_SERVICE_APP_PORT: "8106"
+  
+  # PostgreSQL Configuration
+  POSTGRES_USER: "postgres"
+  POSTGRES_PASSWORD: "super_secret_password"
+  POSTGRES_DB_DEFAULT: "postgres"
+  POSTGRES_DB_AUTH: "VEHICLE_AUTH_DB"
+  POSTGRES_DB_DISPATCH: "VEHICLE_DISPATCH_DB"
+  POSTGRES_DB_VEHICLE: "VEHICLE_VEHICLE_DB"
+  
+  # Database URLs
+  AUTH_SERVICE_SQL_URL: "jdbc:postgresql://postgres-db:5432/VEHICLE_AUTH_DB"
+  DISPATCH_SERVICE_SQL_URL: "jdbc:postgresql://postgres-db:5432/VEHICLE_DISPATCH_DB"
+  VEHICLE_SERVICE_SQL_URL: "jdbc:postgresql://postgres-db:5432/VEHICLE_VEHICLE_DB"
+  LOGGING_SERVICE_MONGO_URL: "mongodb://mongo-logging:27017/loggingdb"
+  
+  # Security
+  API_INTERNAL_KEY: "internalKey"
+  JWT_SECRET: "431da76bdce7104b0a69902ede07459b0087f110d969fb15fef07afc899012ac07bc3435d063f8619c1523d917e84024ee8784c3f2e619c1efb770d86221bf35"
+  JWT_EXP: "604800000"
+  
+  # RabbitMQ
+  RABBITMQ_URL: "rabbitmq"
+  RABBITMQ_PORT: "5672"
+  RABBITMQ_USER: "app_rabbit"
+  RABBITMQ_PASSWORD: "super_secret_rabbit"
+  MESSAGE_TYPE: "webClient"
+  
+  # Service URLs
+  API_GATEWAY_URL: "http://api-gateway:8102"
+  LOGGING_SERVICE_URL: "http://logging-service:8104"
+  DISPATCH_SERVICE_URL: "http://dispatch-service:8105"
+  AUTH_SERVICE_URL: "http://auth-service:8103"
+  VEHICLE_SERVICE_URL: "http://vehicle-service:8106"
+  
+  # UI URLs
+  AUTO_PORT_URL: "http://localhost:3001"
+  ADMIN_DESK_URL: "http://localhost:3000"

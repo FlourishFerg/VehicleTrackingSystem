@@ -1,0 +1,44 @@
+# -------------------------------
+# Deployment: api-gateway
+# -------------------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-gateway
+  template:
+    metadata:
+      labels:
+        app: api-gateway
+    spec:
+      containers:
+        - name: api-gateway
+          image: brightdotdev/vta-api-gateway:v1
+          ports:
+            - containerPort: 8102  
+          envFrom:
+            - configMapRef:
+                name: global-config
+
+---
+
+# -------------------------------
+# Service: api-gateway
+# -------------------------------
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-gateway
+spec:
+  selector:
+    app: api-gateway
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 8102
+      targetPort: 8102
+
