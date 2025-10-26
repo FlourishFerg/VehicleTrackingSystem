@@ -1,0 +1,210 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-gateway
+  template:
+    metadata:
+      labels:
+        app: api-gateway
+    spec:
+      containers:
+        - name: api-gateway
+          image: brightdotdev/vta-api-gateway:v1
+          ports:
+            - containerPort: 8102  
+          envFrom:
+            - configMapRef:
+                name: global-config
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth-service
+  template:
+    metadata:
+      labels:
+        app: auth-service
+    spec:
+      initContainers:
+      - name: wait-for-db
+        image: postgres:15-alpine
+        command: 
+        - sh
+        - -c
+        - |
+          until pg_isready -h postgres-db -U postgres; do 
+            echo "waiting for database server"; 
+            sleep 5; 
+          done;
+          echo "Checking if vehicle_auth_db exists...";
+          until psql -h postgres-db -U postgres -c "SELECT 1 FROM pg_database WHERE datname='vehicle_auth_db'" | grep -q 1; do 
+            echo "Database not ready yet"; 
+            sleep 2; 
+          done;
+          echo "vehicle_auth_db is ready!"
+        env:
+        - name: PGPASSWORD
+          value: "super_secret_password"
+      containers:
+        - name: auth-service
+          image: brightdotdev/vta-auth-service:v1
+          ports:
+            - containerPort: 8103
+          envFrom:
+            - configMapRef:
+                name: global-config
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dispatch-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dispatch-service
+  template:
+    metadata:
+      labels:
+        app: dispatch-service
+    spec:
+      initContainers:
+      - name: wait-for-db
+        image: postgres:15-alpine
+        command: 
+        - sh
+        - -c
+        - |
+          until pg_isready -h postgres-db -U postgres; do 
+            echo "waiting for database server"; 
+            sleep 5; 
+          done;
+          echo "Checking if vehicle_dispatch_db exists...";
+          until psql -h postgres-db -U postgres -c "SELECT 1 FROM pg_database WHERE datname='vehicle_dispatch_db'" | grep -q 1; do 
+            echo "Database not ready yet"; 
+            sleep 2; 
+          done;
+          echo "vehicle_dispatch_db is ready!"
+        env:
+        - name: PGPASSWORD
+          value: "super_secret_password"
+      containers:
+        - name: dispatch-service
+          image: brightdotdev/vta-dispatch-service:v1
+          ports:
+            - containerPort: 8105
+          envFrom:
+            - configMapRef:
+                name: global-config
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vehicle-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vehicle-service
+  template:
+    metadata:
+      labels:
+        app: vehicle-service
+    spec:
+      initContainers:
+      - name: wait-for-db
+        image: postgres:15-alpine
+        command: 
+        - sh
+        - -c
+        - |
+          until pg_isready -h postgres-db -U postgres; do 
+            echo "waiting for database server"; 
+            sleep 5; 
+          done;
+          echo "Checking if vehicle_vehicle_db exists...";
+          until psql -h postgres-db -U postgres -c "SELECT 1 FROM pg_database WHERE datname='vehicle_vehicle_db'" | grep -q 1; do 
+            echo "Database not ready yet"; 
+            sleep 2; 
+          done;
+          echo "vehicle_vehicle_db is ready!"
+        env:
+        - name: PGPASSWORD
+          value: "super_secret_password"
+      containers:
+        - name: vehicle-service
+          image: brightdotdev/vta-vehicle-service:v1
+          ports:
+            - containerPort: 8106
+          envFrom:
+            - configMapRef:
+                name: global-config
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: logging-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: logging-service
+  template:
+    metadata:
+      labels:
+        app: logging-service
+    spec:
+      initContainers:
+      - name: wait-for-mongo
+        image: mongo:6.0
+        command: 
+        - sh
+        - -c
+        - |
+          until mongosh --host mongo-logging --eval "db.adminCommand(\"ping\")" --quiet; do 
+            echo "waiting for MongoDB"; 
+            sleep 5; 
+          done;
+          echo "MongoDB is ready!"
+      containers:
+        - name: logging-service
+          image: brightdotdev/vta-logging-service:v1
+          ports:
+            - containerPort: 8104
+          envFrom:
+            - configMapRef:
+                name: global-config
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
