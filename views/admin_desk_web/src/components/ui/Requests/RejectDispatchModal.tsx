@@ -30,7 +30,7 @@ const handleRejectDispatch = ( rejectReason :  string  , vehicleData : VehicleDT
   toast.info("Yup the dispatch is rejected")
   setLoading(false);
   toast.info("Redirecting now")
-  window.location.href =`/vehicles/request?vehicleReq=${dispatchData.dispatchId}&vehicle=${vehicleData.vehicleIdentificationNumber}`
+
 }
 
 

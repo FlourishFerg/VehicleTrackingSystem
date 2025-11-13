@@ -59,7 +59,6 @@ export const getVehicleDispatchHistoryApi = async (
     console.error(error);
     // Redirect only if it's an authentication issue
     if (error.message?.toLowerCase().includes("unauthorized")) {
-      window.location.replace("/");
     }
     return [];
   }
@@ -84,7 +83,6 @@ export const handleDispatchAccept = async (dispatchId: number) => {
     toast.error(error.message || "Something went wrong while accepting dispatch");
     console.error(error);
     if (error.message?.toLowerCase().includes("unauthorized")) {
-      window.location.replace("/");
     }
   }
 };

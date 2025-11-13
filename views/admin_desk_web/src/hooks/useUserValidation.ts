@@ -38,7 +38,6 @@ import { toast } from "sonner";
                 
                 setLoading(false);
                 deleteCookie(dotEnv.adminCookieName);
-                return window.location.replace("/")
             } catch (error) {
               setLoading(false)
             } finally {

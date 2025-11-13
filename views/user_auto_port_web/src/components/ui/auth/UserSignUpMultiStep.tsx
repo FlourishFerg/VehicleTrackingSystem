@@ -77,7 +77,6 @@ const UserSignUpMultiStep = ({ pageSender }: { pageSender: string }) => {
       } 
       else {
         toast.error("Invalid sign in parameters")
-        return window.location.replace("/")
       }
     } catch (error) {
       toast.error("An error occurred during sign up")

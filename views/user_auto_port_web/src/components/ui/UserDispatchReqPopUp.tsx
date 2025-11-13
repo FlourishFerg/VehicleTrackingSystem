@@ -40,7 +40,6 @@ const handleDispatchRequestFunc = async (
       toast.info("Redirecting now...");
 
       // Redirect to "/" without adding current page to history
-      window.location.replace("/");
     }, 1000);
   } else {
     // If request failed, show error and stop loading

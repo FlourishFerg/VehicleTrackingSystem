@@ -52,7 +52,6 @@ const handleAdminReqKeyValidation = async (
     console.error("[handleAdminReqKeyValidation] Error:", error);
     toast.error(error instanceof Error ? error.message : String(error));
     toast.message("Redirecting...");
-    window.location.replace(requester);
   }
 };
 /**
@@ -185,7 +184,6 @@ export const handleAdminLocalSignUp = async (
     
   } finally {
     setLoading(false);
-    window.location.replace("/");
   }
 };
 
@@ -229,7 +227,6 @@ export const handleAdminLocalLogInSubmit = async (
     toast.error(err.message || "Sign Up failed");
   } finally {
     setLoading(false);
-    window.location.replace("/");
 
   }
 };

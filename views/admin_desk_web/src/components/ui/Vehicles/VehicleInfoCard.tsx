@@ -175,7 +175,7 @@ const [loading, setLoading] = React.useState(false);
   return (
     <article className='relative flex flex-col h-[32rem] pb-4
     items-center  gap-12 vehicleCardBody  shadow-md 
-    w-[var(--size-vehicleCard)]  bg-background'>
+    w-[var(--size-vehicleCard)]  bg-background2'>
       
 <div className="relative vehicleCard flex items-center justify-center w-full h-[12rem] bg-blue-500 overflow-hidden">
   {/* Placeholder image covering the parent */}
@@ -235,8 +235,7 @@ items-start justify-start gap-6">
     );
   }}
   disabled={loading}
-  className={`text-normal bg-gradient-to-r from-blue-500 via-blue-400 to-blue-600
-    cursor-pointer px-14 py-1 rounded-lg shadow-md
+  className={`text-normal bg-blue-400 cursor-pointer px-14 py-1 rounded-lg shadow-md
     transition-all duration-200
     hover:from-blue-600 hover:via-blue-500 hover:to-blue-700
     hover:scale-105 hover:shadow-lg

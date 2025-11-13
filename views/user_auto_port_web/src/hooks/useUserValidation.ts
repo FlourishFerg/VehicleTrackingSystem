@@ -47,7 +47,6 @@ import { toast } from "sonner";
               
                 setLoading(false);
                 deleteCookie(dotEnv.userCookieName);
-                return window.location.replace("/")
             } catch (error) {
               setLoading(false);
               toast.error("Something went wrong")
