@@ -23,6 +23,8 @@ kubectl get pods -w
 postgres-db-xxx     1/1     Running   0          2m
 mongo-logging-xxx   1/1     Running   0          2m
 ```
+
+
 **Then press `Ctrl+C`**
 
 ### Step 3: Verify Databases
