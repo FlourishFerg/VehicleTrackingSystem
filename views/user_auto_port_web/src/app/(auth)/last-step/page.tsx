@@ -21,7 +21,6 @@ export default function Home() {
       checkValidation()
 
     if(isValidated){
-      router.replace("/")
       return;
     }
   }

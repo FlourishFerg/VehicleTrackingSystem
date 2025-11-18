@@ -185,7 +185,6 @@ export const handleAdminLocalSignUp = async (
     
   } finally {
     setLoading(false);
-    window.location.replace("/");
   }
 };
 
